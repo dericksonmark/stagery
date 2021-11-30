@@ -1,0 +1,11 @@
+@import url(https://fonts.googleapis.com/css?family=Outfit);
+
+#options {
+    font-family: 'Outfit';
+    padding: 20px;
+}
+
+#render {
+    margin: 0px;
+    height: 500px;
+}
