@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/app.css">
     <script src="https://cdn.jsdelivr.net/npm/three@0.135.0/build/three.min.js"></script>
-    <script defer src="./render.js"></script>
+    <script src="./js/stagebuilder.js"></script>
+    <script defer src="./js/uimanager.js"></script>
+    <script defer src="./js/render.js"></script>
     <title>Stagery</title>
 </head>
 <body>
@@ -18,7 +20,8 @@
         <label for="stage-center">Stage Center</label><br>
 
         <input type="checkbox" id="stage-right">
-        <label for="stage-right">Stage Right</label>
+        <label for="stage-right">Stage Right</label><br>
+        <button id="reset">Reset</button>
     </div>
     <div id="render"></div>
     <div id="debug"></div>

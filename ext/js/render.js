@@ -17,6 +17,8 @@ var lookdown = false;
 var turnleft = false;
 var turnright = false;
 
+var speedup = false;
+
 var reset = false;
 
 if (window.innerWidth <= 500) {
@@ -28,11 +30,18 @@ if (window.innerWidth <= 500) {
     renderer.setSize(window.innerWidth, renderWindow.clientHeight);
     renderWindow.appendChild(renderer.domElement);
 
-    const geometry = new THREE.BoxGeometry();
-    const material = new THREE.MeshBasicMaterial({color: 0xffffff,wireframe:true});
-    const cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
-    camera.position.z = 5;
+    const geometry = [];
+    for (const fig of stagebuilder(20, 10, 10)) {
+        const face = new THREE.PlaneGeometry(fig[0], fig[1]);
+        const material = new THREE.MeshBasicMaterial({color: fig[4], side: THREE.DoubleSide});
+        const plane = new THREE.Mesh(face, material);
+        scene.add(plane);
+        plane.position.set(fig[2][0], fig[2][1], fig[2][2]);
+        plane.rotation.set(fig[3][0], fig[3][1], fig[3][2]);
+    }
+
+    camera.position.z = 25;
+    camera.position.y = 2;
 
     document.onkeydown = function (e) {
         console.log(e.code)
@@ -68,6 +77,8 @@ if (window.innerWidth <= 500) {
                 e.preventDefault(); turnleft = true; break;
             case 'KeyX':
                 e.preventDefault(); turnright = true; break;
+            case 'ControlLeft':
+                e.preventDefault(); speedup = true; break;
             default:
                 break;
         }
@@ -109,32 +120,40 @@ if (window.innerWidth <= 500) {
             default:
                 break;
         }
+        if (!up && !down && !left && !right) speedup = false;
     }
 
     function animate() {
         requestAnimationFrame( animate );   
 
-        if (up) camera.position.z += 0.05;
-        if (down) camera.position.z -= 0.05;
-        if (right) camera.position.x -= 0.05;
-        if (left) camera.position.x += 0.05;
+        if (!speedup) {
+            if (up) camera.position.set(camera.position.x + 0.05 * Math.sin(camera.rotation.y), camera.position.y, camera.position.z + 0.05 * Math.cos(camera.rotation.y));
+            if (down) camera.position.set(camera.position.x - 0.05 * Math.sin(camera.rotation.y), camera.position.y, camera.position.z - 0.05 * Math.cos(camera.rotation.y));
+            if (right) camera.position.set(camera.position.x - 0.05 * Math.cos(camera.rotation.y), camera.position.y, camera.position.z + 0.05 * Math.sin(camera.rotation.y));
+            if (left) camera.position.set(camera.position.x + 0.05 * Math.cos(camera.rotation.y), camera.position.y, camera.position.z - 0.05 * Math.sin(camera.rotation.y));
+        } else {
+            if (up) camera.position.set(camera.position.x + 0.15 * Math.sin(camera.rotation.y), camera.position.y, camera.position.z + 0.15 * Math.cos(camera.rotation.y));
+            if (down) camera.position.set(camera.position.x - 0.15 * Math.sin(camera.rotation.y), camera.position.y, camera.position.z - 0.15 * Math.cos(camera.rotation.y));
+            if (right) camera.position.set(camera.position.x - 0.15 * Math.cos(camera.rotation.y), camera.position.y, camera.position.z + 0.15 * Math.sin(camera.rotation.y));
+            if (left) camera.position.set(camera.position.x + 0.15 * Math.cos(camera.rotation.y), camera.position.y, camera.position.z - 0.15 * Math.sin(camera.rotation.y));
+        }
         if (jump) camera.position.y -= 0.05;
         if (fall) camera.position.y += 0.05;
         if (fovup) camera.fov++;
         if (fovdown) camera.fov--;
-        if (lookleft) camera.rotation.y += 0.01;
-        if (lookright) camera.rotation.y -= 0.01;
-        if (lookup) camera.rotation.x += 0.01;
-        if (lookdown) camera.rotation.x -= 0.01;
-        if (turnleft) camera.rotation.z -= 0.01;
-        if (turnright) camera.rotation.z += 0.01;
+        if (lookleft) camera.rotation.y += 0.015;
+        if (lookright) camera.rotation.y -= 0.015;
+        if (lookup) camera.rotation.x += 0.015;
+        if (lookdown) camera.rotation.x -= 0.015;
+        if (turnleft) camera.rotation.z -= 0.015;
+        if (turnright) camera.rotation.z += 0.015;
 
         if (camera.rotation.x >= 2 * Math.PI || camera.rotation.x <= -2 * Math.PI) camera.rotation.x = 0;
         if (camera.rotation.y >= 2 * Math.PI || camera.rotation.y <= -2 * Math.PI) camera.rotation.y = 0;
         if (camera.rotation.z >= 2 * Math.PI || camera.rotation.z <= -2 * Math.PI) camera.rotation.z = 0;
  
         if (reset) {
-            camera.position.set(0, 0, 5);
+            camera.position.set(0, 2, 25);
             camera.rotation.x = 0;
             camera.rotation.y = 0;
             camera.rotation.z = 0;
@@ -146,7 +165,7 @@ if (window.innerWidth <= 500) {
         debugWindow.innerText += `\nRotation: X: ${(camera.rotation.x * 180/Math.PI % 360).toFixed(2)} Y: ${(camera.rotation.y * 180/Math.PI % 360).toFixed(2)} Z: ${(camera.rotation.z * 180/Math.PI % 360).toFixed(2)}`
         debugWindow.innerText += `\nFOV: ${camera.fov.toFixed(1)}`;
 
-        renderer.render( scene, camera );
+        renderer.render(scene, camera);
     }
 
     animate();
