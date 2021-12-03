@@ -7,5 +7,9 @@
 
 #render {
     margin: 0px;
-    height: 500px;
+    height: 720px;
+}
+
+canvas {
+    cursor: none;
 }
