@@ -44,11 +44,11 @@ function build() {
 
         scene.background = new THREE.Color(0x808080)
 
-        const spotlight = lightbuilder(9, 0.4, 2000, [0, 5.2, 10], [Math.PI, 0, 0]);
+        const spotlight = lightbuilder(9, 0.4, 10000, [0, 5.2, 10], [Math.PI, 0, 0]);
         scene.add( spotlight );
 
         const geometry = [];
-        for (const fig of stagebuilder(9.6, 7.9, 5.2, 3, 2)) {
+        for (const fig of stagebuilder(11.6, 7.9, 9.1, 3, 2)) {
             const face = new THREE.PlaneGeometry(fig[0], fig[1]);
             let material;
             if (nightVision.checked) material = new THREE.MeshBasicMaterial({color: fig[4], side: THREE.DoubleSide});
