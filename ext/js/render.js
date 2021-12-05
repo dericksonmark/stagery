@@ -31,9 +31,7 @@ var speedup = false;
 var reset = false;
 
 function build() {
-    if (window.innerWidth <= 500) {
-        renderWindow.innerText = 'The stage cannot be rendered in a window this small. :(\nIf you resized the page, refresh!';
-    } else {
+    if (compatibilityCheck()) {
         if (renderWindow.firstChild) renderWindow.removeChild(renderWindow.firstChild);
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(60, window.innerWidth / renderWindow.clientHeight, 0.1, 1000);
@@ -42,7 +40,7 @@ function build() {
         renderer.setSize(window.innerWidth, renderWindow.clientHeight);
         renderWindow.appendChild(renderer.domElement);
 
-        scene.background = new THREE.Color(0x808080)
+        scene.background = new THREE.Color(0x808080);
 
         const spotlight = lightbuilder(9, 0.4, 10000, [0, 5.2, 10], [Math.PI, 0, 0]);
         scene.add( spotlight );
