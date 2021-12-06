@@ -6,6 +6,7 @@ const floorColor = document.getElementById('floor');
 const ceilColor = document.getElementById('ceil');
 const sideColor = document.getElementById('side');
 const backColor = document.getElementById('back');
+const curtainColor = document.getElementById('curtains');
 
 // Effect inputs
 const nightVision = document.getElementById('fullbright');
@@ -46,7 +47,7 @@ function build() {
         scene.add( spotlight );
 
         const geometry = [];
-        for (const fig of stagebuilder(11.6, 7.9, 9.1, 3, 2)) {
+        for (const fig of stagebuilder(11.6, 7.8, 9.1, 3, 2)) {
             const face = new THREE.PlaneGeometry(fig[0], fig[1]);
             let material;
             if (nightVision.checked) material = new THREE.MeshBasicMaterial({color: fig[4], side: THREE.DoubleSide});
@@ -57,6 +58,8 @@ function build() {
             plane.position.set(fig[2][0], fig[2][1], fig[2][2]);
             plane.rotation.set(fig[3][0], fig[3][1], fig[3][2]);
         }
+
+        scene.add(curtainbuilder(0, 8, 3.9, 11.6, 2.2, nightVision.checked, curtainColor.value))
 
         camera.position.set(0, 2, 25);
 
