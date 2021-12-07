@@ -43,8 +43,8 @@ function build() {
 
         scene.background = new THREE.Color(0x808080);
 
-        const spotlight = lightbuilder(9, 0.4, 10000, [0, 5.2, 10], [Math.PI, 0, 0]);
-        scene.add( spotlight );
+        const spotlight = lightbuilder(9, 0.4, 10000, [10, 5.2, 10], [-2, 5, 2]);
+        scene.add(spotlight).add(spotlight.target);
 
         const geometry = [];
         for (const fig of stagebuilder(11.6, 7.8, 9.1, 3, 2)) {
@@ -59,12 +59,11 @@ function build() {
             plane.rotation.set(fig[3][0], fig[3][1], fig[3][2]);
         }
 
-        scene.add(curtainbuilder(0, 8, 3.9, 11.6, 2.2, nightVision.checked, curtainColor.value))
+        scene.add(curtainbuilder(0, 8, 3.9, 11.6, 2.2, nightVision.checked, curtainColor.value));
 
         camera.position.set(0, 2, 25);
 
         document.onkeydown = function (e) {
-            console.log(e.code)
             switch (e.code) {
                 case 'ArrowDown':
                     e.preventDefault(); up = true; break;
