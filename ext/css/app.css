@@ -1,15 +1,37 @@
 @import url(https://fonts.googleapis.com/css?family=Outfit);
 
 #options {
-    font-family: 'Outfit';
+    font-family: sans-serif, 'Outfit';
     padding: 20px;
 }
 
 #render {
     margin: 0px;
-    height: 720px;
 }
 
 canvas {
     cursor: none;
+}
+
+table {
+    width: 50%;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+th {
+    text-align: left;
+}
+
+tr {
+    border: 1px solid black;
+    height: 3.5ex;
+}
+
+.colorpreview {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border: 1px solid black;
+    margin-right: 4px;
 }

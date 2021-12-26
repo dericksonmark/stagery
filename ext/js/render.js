@@ -1,6 +1,9 @@
 const renderWindow = document.getElementById('render');
 const debugWindow = document.getElementById('debug');
 
+// Effect inputs
+const nightVision = document.getElementById('fullbright');
+
 // Color inputs
 const floorColor = document.getElementById('floor');
 const ceilColor = document.getElementById('ceil');
@@ -8,8 +11,13 @@ const sideColor = document.getElementById('side');
 const backColor = document.getElementById('back');
 const curtainColor = document.getElementById('curtains');
 
-// Effect inputs
-const nightVision = document.getElementById('fullbright');
+// Stage dimensions
+const stgwidth = document.getElementById('stgwidth');
+const stgheight = document.getElementById('stgheight');
+const stgdepth = document.getElementById('stgdepth');
+const aprextw = document.getElementById('aprextw');
+const aprextd = document.getElementById('aprextd');
+
 
 // Keys
 var up = false;
@@ -31,7 +39,7 @@ var speedup = false;
 
 var reset = false;
 
-function build() {
+function build(lightinputs) {
     if (compatibilityCheck()) {
         if (renderWindow.firstChild) renderWindow.removeChild(renderWindow.firstChild);
         const scene = new THREE.Scene();
@@ -42,12 +50,20 @@ function build() {
         renderWindow.appendChild(renderer.domElement);
 
         scene.background = new THREE.Color(0x808080);
-
-        const spotlight = lightbuilder(9, 0.4, 10000, [10, 5.2, 10], [-2, 5, 2]);
-        scene.add(spotlight).add(spotlight.target);
+        
+        const lights = [];
+        const helpers = [];
+        for (const light of lightinputs) {
+            const spotlight = lightbuilder(light[0], light[2], light[1], 10000, [10, 5.2, 10], [-2, 5, 2]);
+            scene.add(spotlight).add(spotlight.target);
+            lights.push(spotlight)
+            const slh = new THREE.SpotLightHelper(spotlight);
+            helpers.push(slh);
+            scene.add(slh);
+        }
 
         const geometry = [];
-        for (const fig of stagebuilder(11.6, 7.8, 9.1, 3, 2)) {
+        for (const fig of stagebuilder(parseFloat(stgwidth.value) || 11.6, parseFloat(stgdepth.value) || 7.8, parseFloat(stgheight.value) || 9.1, inputdefault(aprextd.value, 3), inputdefault(aprextw.value, 2))) {
             const face = new THREE.PlaneGeometry(fig[0], fig[1]);
             let material;
             if (nightVision.checked) material = new THREE.MeshBasicMaterial({color: fig[4], side: THREE.DoubleSide});
@@ -59,7 +75,8 @@ function build() {
             plane.rotation.set(fig[3][0], fig[3][1], fig[3][2]);
         }
 
-        scene.add(curtainbuilder(0, 8, 3.9, 11.6, 2.2, nightVision.checked, curtainColor.value));
+        // TODO: Implementation for curtains
+        //scene.add(curtainbuilder(0, 8, 3.9, 11.6, 2.2, nightVision.checked, curtainColor.value));
 
         camera.position.set(0, 2, 25);
 
@@ -179,7 +196,12 @@ function build() {
                 camera.fov = 60;
             }
 
+            for (const helper of helpers) {
+                helper.update();
+            }
+
             camera.updateProjectionMatrix();
+            debugWindow.style.height = '3em';
             debugWindow.innerText = `Position: X: ${camera.position.x.toFixed(2)} Y: ${camera.position.y.toFixed(2)} Z: ${camera.position.z.toFixed(2)}`;
             debugWindow.innerText += `\nRotation: X: ${(camera.rotation.x * 180/Math.PI % 360).toFixed(2)} Y: ${(camera.rotation.y * 180/Math.PI % 360).toFixed(2)} Z: ${(camera.rotation.z * 180/Math.PI % 360).toFixed(2)}`
             debugWindow.innerText += `\nFOV: ${camera.fov.toFixed(1)}`;

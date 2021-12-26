@@ -11,6 +11,8 @@
     <script src="./js/stagebuilder.js"></script>
     <script src="./js/webgl.js"></script>
     <script src="./js/compatibility.js"></script>
+    <script src="./js/inputdefault.js"></script>
+    <script src="./js/tablebuilder.js"></script>
     <script defer src="./js/uimanager.js"></script>
     <script defer src="./js/render.js"></script>
     <title>Stagery</title>
@@ -18,9 +20,11 @@
 <body>
     <div id="render"></div>
     <div id="options">
+        <h4>Viewer</h4>
         <input type="checkbox" id="fullbright">
         <label for="fullbright">Night Vision</label>
-
+        
+        <h4>Colors</h4>
         <input type="color" id="floor" value="#0000ff">
         <label for="floor">Floor</label>
         <input type="color" id="ceil" value="#00ff00">
@@ -33,8 +37,46 @@
         <label for="apron">Apron</label>
         <input type="color" id="curtains" value="#800000">
         <label for="curtains">Curtains</label>
+        
+        <h4>Stage</h4>
+        <input type="number" id="stgwidth" placeholder="11.6">
+        <label for="stgwidth">Width (m)</label>
+        <input type="number" id="stgheight" placeholder="9.1">
+        <label for="stgheight">Height (m)</label>
+        <input type="number" id="stgdepth" placeholder="7.8">
+        <label for="stgdepth">Depth (m)</label>
+        <input type="number" id="aprextw" placeholder="2">
+        <label for="aprexwt">Apron extended width (m)</label>
+        <input type="number" id="aprextd" placeholder="3">
+        <label for="aprextd">Apron extended depth (m)</label>
 
-        <button id="reset">Load</button>
+        <h4>Lights configuration</h4>
+        <input type="color" id="lightcolor" value="#ffffff">
+        <label for="lightcolor">Color</label>
+        <input type="number" id="lightfocus" placeholder="0.2" style="width: 6ch;">
+        <label for="lightfocus">Blur (0-1)</label>
+        <input type="number" id="lightangle" placeholder="32">
+        <label for="lightangle">Lens angle</label>
+        <input type="number" id="lighttargetx" placeholder="0">
+        <label for="lighttargetx">Target (x)</label>
+        <input type="number" id="lighttargety" placeholder="0">
+        <label for="lighttargety">Target (y)</label>
+        <input type="number" id="lighttargetz" placeholder="0">
+        <label for="lighttargetz">Target (z)</label>
+        <button id="loadlightbtn">Load light</button>
+        <span id="lightstatus"></span><br><br>
+        <table id="lightstable">
+            <tr>
+                <th></th>
+                <th>Light ID</th>
+                <th>Color</th>
+                <th>Blur</th>
+                <th>Lens angle</th>
+            </tr>
+        </table><br>
+        <button id="removelightbtn">Remove selected lights</button>
+
+        <br><br><button id="reset">Load</button>
         
     </div>
     <div id="debug"></div>
