@@ -3,10 +3,16 @@
 #options {
     font-family: sans-serif, 'Outfit';
     padding: 20px;
+    margin: 30px;
 }
 
 #render {
     margin: 0px;
+}
+
+#debug {
+    margin-top: 40px;
+    margin-bottom: 20px;
 }
 
 canvas {
@@ -34,4 +40,16 @@ tr {
     height: 10px;
     border: 1px solid black;
     margin-right: 4px;
+}
+
+h4 {
+    margin-top: 40px;
+}
+
+.lightconfig {
+    width: 6.75ch;
+}
+
+.fileupload {
+    font-size: 14px;
 }

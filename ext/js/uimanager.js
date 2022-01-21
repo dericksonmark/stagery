@@ -1,10 +1,20 @@
 const renderspace = document.getElementById('render');
+const lightstable = document.getElementById('lightstable');
 
+// Buttons
 const resetbtn = document.getElementById('reset');
 const loadlightbtn = document.getElementById('loadlightbtn');
 const removelightbtn = document.getElementById('removelightbtn');
+const loadobjectbtn = document.getElementById('loadobjectbtn');
+const objupbtn = document.getElementById('objupbtn');
+const objdownbtn = document.getElementById('objdownbtn');
+const objleftbtn = document.getElementById('objleftbtn');
+const objrightbtn = document.getElementById('objrightbtn');
+const objbackbtn = document.getElementById('objbackbtn');
+const objforwardbtn = document.getElementById('objforwardbtn');
 
-const lightstable = document.getElementById('lightstable');
+// Viewer inputs
+const nightvision = document.getElementById('fullbright');
 
 // Light inputs
 const lightcolor = document.getElementById('lightcolor');
@@ -12,14 +22,26 @@ const lightblur = document.getElementById('lightfocus');
 const lightangle = document.getElementById('lightangle');
 const lightstatus = document.getElementById('lightstatus');
 
-const lights = []; // lightangle, lightcolor, lightblur
+// Object inputs
+const objinput = document.getElementById('objuploader');
+const mtlinput = document.getElementById('mtluploader');
+
+// Data
+const lights = [];
 const lightselectors = [];
+let objects = [];
+
 let lightid = 0;
 
+
+/**
+ * Main loader
+ */
 resetbtn.onclick = function() {
-    renderspace.style.height = '720px';
-    build(lights);
+    const data = prebuild(nightvision.checked, renderspace, objects, lights);
+    build(data);
 }
+
 
 loadlightbtn.onclick = function() {
     lightid++;
@@ -56,4 +78,51 @@ removelightbtn.onclick = function() {
         lightid++;
         cell.innerHTML = lightid;
     }
+}
+
+loadobjectbtn.onclick = function() {
+    fileloader(document.getElementById('objuploader'), function (obj) {
+        fileloader(document.getElementById('mtluploader'), function(mtl) {
+            objects.push(objloader(nightvision.checked, obj, mtl, 0, 0, 0));
+        });
+    });
+    build(lights, objects);
+}
+
+// Object position controllers
+
+objrightbtn.onclick = function() {
+    const object = objects.pop();
+    object.position.set(object.position.x + 1, object.position.y, object.position.z);
+    objects.push(object);
+}
+
+objleftbtn.onclick = function() {
+    const object = objects.pop();
+    object.position.set(object.position.x - 1, object.position.y, object.position.z);
+    objects.push(object);
+}
+
+objupbtn.onclick = function() {
+    const object = objects.pop();
+    object.position.set(object.position.x, object.position.y + 1, object.position.z);
+    objects.push(object);
+}
+
+objdownbtn.onclick = function() {
+    const object = objects.pop();
+    object.position.set(object.position.x, object.position.y - 1, object.position.z);
+    objects.push(object);
+}
+
+objforwardbtn.onclick = function() {
+    const object = objects.pop();
+    object.position.set(object.position.x, object.position.y, object.position.z + 1);
+    objects.push(object);
+}
+
+objbackbtn.onclick = function() {
+    const object = objects.pop();
+    object.position.set(object.position.x, object.position.y, object.position.z - 1);
+    objects.push(object);
 }

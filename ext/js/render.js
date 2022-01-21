@@ -39,7 +39,15 @@ var speedup = false;
 
 var reset = false;
 
-function build(lightinputs) {
+function build(data) {
+
+    const xWorldAxisVector = new THREE.Vector3(1, 0, 0);
+    const yWorldAxisVector = new THREE.Vector3(0, 1, 0);
+    const zWorldAxisVector = new THREE.Vector3(0, 0, 1)
+
+    const lightinputs = data.lights;
+    const objectinputs = data.objects;
+
     if (compatibilityCheck()) {
         if (renderWindow.firstChild) renderWindow.removeChild(renderWindow.firstChild);
         const scene = new THREE.Scene();
@@ -73,6 +81,10 @@ function build(lightinputs) {
             scene.add(plane);
             plane.position.set(fig[2][0], fig[2][1], fig[2][2]);
             plane.rotation.set(fig[3][0], fig[3][1], fig[3][2]);
+        }
+
+        for (const object of objectinputs) {
+            scene.add(object);
         }
 
         // TODO: Implementation for curtains
@@ -177,12 +189,12 @@ function build(lightinputs) {
             if (fall) camera.position.y += 0.05;
             if (fovup) camera.fov++;
             if (fovdown) camera.fov--;
-            if (lookleft) camera.rotation.y += 0.015;
-            if (lookright) camera.rotation.y -= 0.015;
-            if (lookup) camera.rotation.x += 0.015;
-            if (lookdown) camera.rotation.x -= 0.015;
-            if (turnleft) camera.rotation.z -= 0.015;
-            if (turnright) camera.rotation.z += 0.015;
+            if (lookleft) camera.rotateOnAxis(yWorldAxisVector, 0.015);
+            if (lookright) camera.rotateOnAxis(yWorldAxisVector, -0.015)
+            if (lookup) camera.rotateOnAxis(xWorldAxisVector, 0.015);
+            if (lookdown) camera.rotateOnAxis(xWorldAxisVector, -0.015);
+            if (turnleft) camera.rotateOnAxis(zWorldAxisVector, -0.015);
+            if (turnright) camera.rotateOnAxis(zWorldAxisVector, 0.015);
 
             if (camera.rotation.x >= 2 * Math.PI || camera.rotation.x <= -2 * Math.PI) camera.rotation.x = 0;
             if (camera.rotation.y >= 2 * Math.PI || camera.rotation.y <= -2 * Math.PI) camera.rotation.y = 0;
@@ -203,7 +215,7 @@ function build(lightinputs) {
             camera.updateProjectionMatrix();
             debugWindow.style.height = '3em';
             debugWindow.innerText = `Position: X: ${camera.position.x.toFixed(2)} Y: ${camera.position.y.toFixed(2)} Z: ${camera.position.z.toFixed(2)}`;
-            debugWindow.innerText += `\nRotation: X: ${(camera.rotation.x * 180/Math.PI % 360).toFixed(2)} Y: ${(camera.rotation.y * 180/Math.PI % 360).toFixed(2)} Z: ${(camera.rotation.z * 180/Math.PI % 360).toFixed(2)}`
+            debugWindow.innerText += `\nRotation: X: ${(camera.rotation.x * 180/Math.PI % 360).toFixed(2)} Y: ${(camera.rotation.y * 180/Math.PI % 360).toFixed(2)} Z: ${(camera.rotation.z * 180/Math.PI % 360).toFixed(2)}`;
             debugWindow.innerText += `\nFOV: ${camera.fov.toFixed(1)}`;
 
             renderer.render(scene, camera);

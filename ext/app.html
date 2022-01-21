@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/app.css">
     <script src="https://cdn.jsdelivr.net/npm/three@0.135.0/build/three.min.js" integrity="sha256-vQtw4P6aOmzeRrza0ncPNvHHxAEDLDYA+Bt+nZAWFV4=" crossorigin="anonymous"></script>
+    <script src="https://threejs.org/examples/js/loaders/OBJLoader.js"></script>
+    <script src="https://threejs.org/examples/js/loaders/MTLLoader.js"></script>
     <script src="./js/curtainbuilder.js"></script>
     <script src="./js/lightbuilder.js"></script>
     <script src="./js/stagebuilder.js"></script>
@@ -13,6 +15,9 @@
     <script src="./js/compatibility.js"></script>
     <script src="./js/inputdefault.js"></script>
     <script src="./js/tablebuilder.js"></script>
+    <script src="./js/fileloader.js"></script>
+    <script src="./js/objloader.js"></script>
+    <script src="./js/prerender.js"></script>
     <script defer src="./js/uimanager.js"></script>
     <script defer src="./js/render.js"></script>
     <title>Stagery</title>
@@ -20,6 +25,7 @@
 <body>
     <div id="render"></div>
     <div id="options">
+        <h1>Configuration</h1>
         <h4>Viewer</h4>
         <input type="checkbox" id="fullbright">
         <label for="fullbright">Night Vision</label>
@@ -50,19 +56,19 @@
         <input type="number" id="aprextd" placeholder="3">
         <label for="aprextd">Apron extended depth (m)</label>
 
-        <h4>Lights configuration</h4>
+        <h4>Lights</h4>
         <input type="color" id="lightcolor" value="#ffffff">
-        <label for="lightcolor">Color</label>
-        <input type="number" id="lightfocus" placeholder="0.2" style="width: 6ch;">
-        <label for="lightfocus">Blur (0-1)</label>
-        <input type="number" id="lightangle" placeholder="32">
-        <label for="lightangle">Lens angle</label>
-        <input type="number" id="lighttargetx" placeholder="0">
-        <label for="lighttargetx">Target (x)</label>
-        <input type="number" id="lighttargety" placeholder="0">
-        <label for="lighttargety">Target (y)</label>
-        <input type="number" id="lighttargetz" placeholder="0">
-        <label for="lighttargetz">Target (z)</label>
+        <label for="lightcolor">Color</label><br>
+        <input type="number" id="lightfocus" placeholder="0.2" class="lightconfig">
+        <label for="lightfocus">Blur (0-1)</label><br>
+        <input type="number" id="lightangle" placeholder="32" class="lightconfig">
+        <label for="lightangle">Lens angle</label><br>
+        <input type="number" id="lighttargetx" placeholder="0" class="lightconfig">
+        <label for="lighttargetx">Target position (x)</label><br>
+        <input type="number" id="lighttargety" placeholder="0" class="lightconfig">
+        <label for="lighttargety">Target position (y)</label><br>
+        <input type="number" id="lighttargetz" placeholder="0" class="lightconfig">
+        <label for="lighttargetz">Target position (z)</label><br>
         <button id="loadlightbtn">Load light</button>
         <span id="lightstatus"></span><br><br>
         <table id="lightstable">
@@ -75,6 +81,20 @@
             </tr>
         </table><br>
         <button id="removelightbtn">Remove selected lights</button>
+
+        <h4>Objects</h4>
+        <span class="fileupload">Upload obj file:  </span><input type="file" accept=".obj" id="objuploader"><br>
+        <span class="fileupload">Upload mtl file:  </span><input type="file" accept=".mtl" id="mtluploader"><br>
+        <button id="loadobjectbtn">Load object</button><br><br>
+
+        <div id="objectcontroller">
+            <button id="objupbtn">▲</button>
+            <button id="objdownbtn">▼</button>
+            <button id="objleftbtn">◀</button>
+            <button id="objrightbtn">▶</button>
+            <button id="objbackbtn">Back</button>
+            <button id="objforwardbtn">Forward</button>
+        </div>
 
         <br><br><button id="reset">Load</button>
         
