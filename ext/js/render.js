@@ -174,16 +174,19 @@ function build(data) {
         function animate() {
             requestAnimationFrame(animate);   
 
+            qrot = new THREE.Quaternion(camera.quaternion.x, camera.quaternion.y * Math.sign(camera.quaternion.w), camera.quaternion.z, camera.quaternion.w);
+            // I don't know why this worked, but it did ¯\_(ツ)_/¯
+
             if (!speedup) {
-                if (up) camera.position.set(camera.position.x + 0.05 * Math.sin(camera.rotation.y), camera.position.y, camera.position.z + 0.05 * Math.cos(camera.rotation.y));
-                if (down) camera.position.set(camera.position.x - 0.05 * Math.sin(camera.rotation.y), camera.position.y, camera.position.z - 0.05 * Math.cos(camera.rotation.y));
-                if (right) camera.position.set(camera.position.x - 0.05 * Math.cos(camera.rotation.y), camera.position.y, camera.position.z + 0.05 * Math.sin(camera.rotation.y));
-                if (left) camera.position.set(camera.position.x + 0.05 * Math.cos(camera.rotation.y), camera.position.y, camera.position.z - 0.05 * Math.sin(camera.rotation.y));
+                if (up) camera.position.set(camera.position.x + 0.05 * Math.sin(qrot.y * Math.PI), camera.position.y, camera.position.z + 0.05 * Math.cos(qrot.y * Math.PI));
+                if (down) camera.position.set(camera.position.x - 0.05 * Math.sin(qrot.y * Math.PI), camera.position.y, camera.position.z - 0.05 * Math.cos(qrot.y * Math.PI));
+                if (right) camera.position.set(camera.position.x - 0.05 * Math.cos(qrot.y * Math.PI), camera.position.y, camera.position.z + 0.05 * Math.sin(qrot.y * Math.PI));
+                if (left) camera.position.set(camera.position.x + 0.05 * Math.cos(qrot.y * Math.PI), camera.position.y, camera.position.z - 0.05 * Math.sin(qrot.y * Math.PI));
             } else {
-                if (up) camera.position.set(camera.position.x + 0.15 * Math.sin(camera.rotation.y), camera.position.y, camera.position.z + 0.15 * Math.cos(camera.rotation.y));
-                if (down) camera.position.set(camera.position.x - 0.15 * Math.sin(camera.rotation.y), camera.position.y, camera.position.z - 0.15 * Math.cos(camera.rotation.y));
-                if (right) camera.position.set(camera.position.x - 0.15 * Math.cos(camera.rotation.y), camera.position.y, camera.position.z + 0.15 * Math.sin(camera.rotation.y));
-                if (left) camera.position.set(camera.position.x + 0.15 * Math.cos(camera.rotation.y), camera.position.y, camera.position.z - 0.15 * Math.sin(camera.rotation.y));
+                if (up) camera.position.set(camera.position.x + 0.15 * Math.sin(qrot.y * Math.PI), camera.position.y, camera.position.z + 0.15 * Math.cos(qrot.y * Math.PI));
+                if (down) camera.position.set(camera.position.x - 0.15 * Math.sin(qrot.y * Math.PI), camera.position.y, camera.position.z - 0.15 * Math.cos(qrot.y * Math.PI));
+                if (right) camera.position.set(camera.position.x - 0.15 * Math.cos(qrot.y * Math.PI), camera.position.y, camera.position.z + 0.15 * Math.sin(qrot.y * Math.PI));
+                if (left) camera.position.set(camera.position.x + 0.15 * Math.cos(qrot.y * Math.PI), camera.position.y, camera.position.z - 0.15 * Math.sin(qrot.y * Math.PI));
             }
             if (jump) camera.position.y -= 0.05;
             if (fall) camera.position.y += 0.05;
@@ -193,12 +196,8 @@ function build(data) {
             if (lookright) camera.rotateOnAxis(yWorldAxisVector, -0.015)
             if (lookup) camera.rotateOnAxis(xWorldAxisVector, 0.015);
             if (lookdown) camera.rotateOnAxis(xWorldAxisVector, -0.015);
-            if (turnleft) camera.rotateOnAxis(zWorldAxisVector, -0.015);
             if (turnright) camera.rotateOnAxis(zWorldAxisVector, 0.015);
-
-            if (camera.rotation.x >= 2 * Math.PI || camera.rotation.x <= -2 * Math.PI) camera.rotation.x = 0;
-            if (camera.rotation.y >= 2 * Math.PI || camera.rotation.y <= -2 * Math.PI) camera.rotation.y = 0;
-            if (camera.rotation.z >= 2 * Math.PI || camera.rotation.z <= -2 * Math.PI) camera.rotation.z = 0;
+            if (turnleft) camera.rotateOnAxis(zWorldAxisVector, -0.015);
     
             if (reset) {
                 camera.position.set(0, 2, 25);
@@ -215,7 +214,10 @@ function build(data) {
             camera.updateProjectionMatrix();
             debugWindow.style.height = '3em';
             debugWindow.innerText = `Position: X: ${camera.position.x.toFixed(2)} Y: ${camera.position.y.toFixed(2)} Z: ${camera.position.z.toFixed(2)}`;
-            debugWindow.innerText += `\nRotation: X: ${(camera.rotation.x * 180/Math.PI % 360).toFixed(2)} Y: ${(camera.rotation.y * 180/Math.PI % 360).toFixed(2)} Z: ${(camera.rotation.z * 180/Math.PI % 360).toFixed(2)}`;
+            debugWindow.innerText += `\nEuler: X: ${(camera.rotation.x/* * 180/Math.PI % 360*/).toFixed(2)} Y: ${(camera.rotation.y/* * 180/Math.PI % 360*/).toFixed(2)} Z: ${(camera.rotation.z/* * 180/Math.PI % 360*/).toFixed(2)}`;
+            debugWindow.innerText += `\nEulerDeg: X: ${(camera.rotation.x * 180/Math.PI % 360).toFixed(2)} Y: ${(camera.rotation.y * 180/Math.PI % 360).toFixed(2)} Z: ${(camera.rotation.z * 180/Math.PI % 360).toFixed(2)}`;
+            debugWindow.innerText += `\nQuaternion: X: ${(camera.quaternion.x/* * 180/Math.PI % 360*/).toFixed(2)} Y: ${(camera.quaternion.y/* * 180/Math.PI % 360*/).toFixed(2)} Z: ${(camera.quaternion.z/* * 180/Math.PI % 360*/).toFixed(2)} W: ${(camera.quaternion.w).toFixed(2)}`;
+            debugWindow.innerText += `\nQuaternionDeg: X: ${(camera.quaternion.x * 180/Math.PI % 360).toFixed(2)} Y: ${(camera.quaternion.y * 180/Math.PI % 360).toFixed(2)} Z: ${(camera.quaternion.z * 180/Math.PI % 360).toFixed(2)} W: ${(camera.quaternion.w * 180/Math.PI % 360).toFixed(2)}`;
             debugWindow.innerText += `\nFOV: ${camera.fov.toFixed(1)}`;
 
             renderer.render(scene, camera);

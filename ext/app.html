@@ -59,15 +59,15 @@
         <h4>Lights</h4>
         <input type="color" id="lightcolor" value="#ffffff">
         <label for="lightcolor">Color</label><br>
-        <input type="number" id="lightfocus" placeholder="0.2" class="lightconfig">
+        <input type="number" id="lightfocus" placeholder="0.2" class="baseconfig">
         <label for="lightfocus">Blur (0-1)</label><br>
-        <input type="number" id="lightangle" placeholder="32" class="lightconfig">
+        <input type="number" id="lightangle" placeholder="32" class="baseconfig">
         <label for="lightangle">Lens angle</label><br>
-        <input type="number" id="lighttargetx" placeholder="0" class="lightconfig">
+        <input type="number" id="lighttargetx" placeholder="0" class="baseconfig">
         <label for="lighttargetx">Target position (x)</label><br>
-        <input type="number" id="lighttargety" placeholder="0" class="lightconfig">
+        <input type="number" id="lighttargety" placeholder="0" class="baseconfig">
         <label for="lighttargety">Target position (y)</label><br>
-        <input type="number" id="lighttargetz" placeholder="0" class="lightconfig">
+        <input type="number" id="lighttargetz" placeholder="0" class="baseconfig">
         <label for="lighttargetz">Target position (z)</label><br>
         <button id="loadlightbtn">Load light</button>
         <span id="lightstatus"></span><br><br>
@@ -88,6 +88,8 @@
         <button id="loadobjectbtn">Load object</button><br><br>
 
         <div id="objectcontroller">
+            <input type="number" id="objscale" class="baseconfig" placeholder="0.1">
+            <label for="objscale">Scale</label><br>
             <button id="objupbtn">▲</button>
             <button id="objdownbtn">▼</button>
             <button id="objleftbtn">◀</button>

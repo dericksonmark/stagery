@@ -25,6 +25,7 @@ const lightstatus = document.getElementById('lightstatus');
 // Object inputs
 const objinput = document.getElementById('objuploader');
 const mtlinput = document.getElementById('mtluploader');
+const objscale = document.getElementById('objscale');
 
 // Data
 const lights = [];
@@ -83,10 +84,11 @@ removelightbtn.onclick = function() {
 loadobjectbtn.onclick = function() {
     fileloader(document.getElementById('objuploader'), function (obj) {
         fileloader(document.getElementById('mtluploader'), function(mtl) {
-            objects.push(objloader(nightvision.checked, obj, mtl, 0, 0, 0));
+            objects.push(objloader(nightvision.checked, obj, mtl, 0, 0, 0, inputdefault(objscale.value, 0.1)));
         });
     });
-    build(lights, objects);
+    const data = prebuild(nightvision.checked, renderspace, objects, lights);
+    build(data);
 }
 
 // Object position controllers
